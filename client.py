@@ -2,9 +2,7 @@
 
 import os
 import discord
-from discord.ext import commands
 from dotenv import load_dotenv
-from datetime import date
 
 
 load_dotenv()
@@ -14,18 +12,17 @@ GUILD = os.getenv('DISCORD_GUILD')
 
 intents = discord.Intents.default()
 intents.members = True
-
-bot = commands.Bot(command_prefix='!', intents=intents)
+client = discord.Client(intents=intents)
 
 
 # on ready is called when the bot logs in
-@bot.event
+@client.event
 async def on_ready():
-    for guild in bot.guilds:
+    for guild in client.guilds:
         if guild.name == GUILD:
             break
     print(
-        f'{bot.user} is connected to the following server:\n'
+        f'{client.user} is connected to the following server:\n'
         f'{guild.name}(id: {guild.id})'
     )
 
@@ -33,14 +30,14 @@ async def on_ready():
         print(member)
 
 
-@bot.command()
-async def get_date(ctx):
-    await ctx.send(date.today())
+# on message is called when a message is received on the server
+@client.event
+async def on_message(message):
+    if message.content.startswith('!hello'):
+        await message.channel.send('trash')
+    if message.content.startswith('!questions'):
+        # for
+        return
 
 
-@bot.command()
-async def test(ctx, arg):
-    await ctx.send(arg)
-
-
-bot.run(TOKEN)
+client.run(TOKEN)

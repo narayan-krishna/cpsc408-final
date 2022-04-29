@@ -43,4 +43,19 @@ async def test(ctx, arg):
     await ctx.send(arg)
 
 
+@bot.command()
+async def repeat(ctx, times: int, content="repeating..."):
+    for i in range(times):
+        await ctx.send(content)
+
+
+@bot.command()
+async def repeat2(ctx, times: int, content="repeating..."):
+    msg = ""
+    for i in range(times):
+        msg += content + "\n"
+
+    await ctx.send(msg)
+
+
 bot.run(TOKEN)

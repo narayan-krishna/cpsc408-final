@@ -1,4 +1,5 @@
 # bot.py
+# test bot provides random test commands
 
 import os
 import discord
@@ -19,6 +20,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 
 # on ready is called when the bot logs in
+# BUG: this function gives a diagnostic error that guild is possibly unbound?
 @bot.event
 async def on_ready():
     for guild in bot.guilds:
@@ -49,12 +51,22 @@ async def repeat(ctx, times: int, content="repeating..."):
         await ctx.send(content)
 
 
+#same as repeat but sends all in one message
 @bot.command()
 async def repeat2(ctx, times: int, content="repeating..."):
     msg = ""
     for i in range(times):
         msg += content + "\n"
 
+    await ctx.send(msg)
+
+
+@bot.command(pass_context = True)
+async def whoami(ctx):
+    msg = (
+        f'name: {ctx.message.author.name}\n'
+        f'id: {ctx.message.author.id}\n'
+    )
     await ctx.send(msg)
 
 

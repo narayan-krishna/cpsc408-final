@@ -22,7 +22,8 @@ dbu = db_utils()
 
 
 # on ready is called when the bot logs in
-# BUG: this function gives a diagnostic error that guild is possibly unbound?
+# BUG: this function gives diagnostic error 
+#   "guild is possibly unbound?"
 @bot.event
 async def on_ready():
     for guild in bot.guilds:
@@ -37,33 +38,9 @@ async def on_ready():
         print(member)
 
 
-@bot.command()
-async def get_date(ctx):
-    await ctx.send(date.today())
-
-
-@bot.command()
-async def test(ctx, arg):
-    await ctx.send(arg)
-
-
-@bot.command()
-async def repeat(ctx, times: int, content="repeating..."):
-    for i in range(times):
-        await ctx.send(content)
-
-
-#same as repeat but sends all in one message
-@bot.command()
-async def repeat2(ctx, times: int, content="repeating..."):
-    msg = ""
-    for i in range(times):
-        msg += content + "\n"
-    await ctx.send(msg)
-
-
 @bot.command(pass_context = True)
 async def whoami(ctx):
+    """Returns username, id"""
     msg = (
         f'name: {ctx.message.author.name}\n'
         f'id: {ctx.message.author.id}\n'
@@ -77,6 +54,7 @@ async def questions(ctx, class_spec="none"):
         return
     return
 
+
 @bot.command(pass_context = True)
 async def SetUpUser(ctx):
     msg = (
@@ -85,34 +63,36 @@ async def SetUpUser(ctx):
     )
     await ctx.send(msg)
 
+
 @bot.command()
-async def AddClass(ctx, content="none"):
-    if content == "none":
+async def AddClass(ctx, class_name="none"):
+    if class_name == "none":
         return
-    dbu.add_class(content)
+    dbu.add_class(class_name)
     return
 
 
 @bot.command()
-async def AddTopic(ctx, content="none"):
-    if content == "none":
+async def AddTopic(ctx, topic_name="none"):
+    if topic_name == "none":
         return
-    dbu.add_topic(content) 
+    dbu.add_topic(topic_name) 
     return
 
 
 @bot.command()
-async def 
+async def AddQuestion(ctx, topic_name="none"):
+    #TODO: figure out how to extract topic
+    return
 
 
-#
-# @bot.command()
-# aysnc def add_question(ctx: class_spec="none"):
-#     
-#
-#
-# @bot.command()
-# async def add_question(ctx, class_spec):
+#TODO: implement answer question
 
+
+#TODO: implement get question
+
+
+#TODO: implement get answers
+    
 
 bot.run(TOKEN)

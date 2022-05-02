@@ -100,6 +100,26 @@ async def AddQuestion(ctx, topic_name="none"):
         await ctx.send(f'you said {msg}')
 
 
+@bot.command()
+async def AddClassTopic(ctx, *args):
+    if len(args) == 0:
+        err_msg = (
+            f'Command requires class name: !AddClassTopic cpsc231\n'
+            f'You can also add optional list of arguments: !AddClassTopic cpsc231 java oo polymorphism'
+        )
+        await ctx.send(err_msg)
+    else:
+        test_msg = ""
+        for index,arg in enumerate(args):
+            if index == 0:
+                test_msg += f'class name: {arg}\n'
+            else:
+                test_msg += f'class topic: {arg}\n'
+        await ctx.send(test_msg)
+
+    return
+
+
 bot.run(TOKEN)
 
 

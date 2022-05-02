@@ -35,25 +35,15 @@ async def on_ready():
         f'{guild.name}(id: {guild.id})'
     )
 
-    for member in guild.members:
-        print(member)
-
 
 @bot.command(pass_context = True)
 async def whoami(ctx):
-    """Returns username, id"""
+    """Returns username, id, potentially list of classes"""
     msg = (
         f'name: {ctx.message.author.name}\n'
         f'id: {ctx.message.author.id}\n'
     )
     await ctx.send(msg)
-
-
-@bot.command()
-async def questions(ctx, class_spec="none"):
-    if class_spec == "none":
-        return
-    return
 
 
 @bot.command(pass_context = True)
@@ -67,9 +57,29 @@ async def SetUpUser(ctx):
 
 @bot.command()
 async def AddClass(ctx, class_name="none"):
+    """Add class to classes table given name"""
     if class_name == "none":
         return
     dbu.add_class(class_name)
+    await ctx.send(f'topic added: {class_name}')
+
+
+@bot.command()
+async def AddClassTopic(ctx, *args):
+    """Add class topics given specified class"""
+    if len(args) == 0:
+        err_msg = (
+            f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism'
+        )
+        await ctx.send(err_msg)
+    else:
+        test_msg = ""
+        for index,arg in enumerate(args):
+            if index == 0:
+                test_msg += f'class name: {arg}\n'
+            else:
+                test_msg += f'class topic: {arg}\n'
+        await ctx.send(test_msg)
     return
 
 

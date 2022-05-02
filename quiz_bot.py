@@ -1,8 +1,9 @@
-# bot.py
-# test bot provides random test commands
+# quiz_bot.py
+# implement main bot fuctionality
 
 import os
 import discord
+from db_utils import db_utils
 from discord.ext import commands
 from dotenv import load_dotenv
 from datetime import date
@@ -27,6 +28,7 @@ async def on_ready():
         if guild.name == GUILD:
             break
     print(
+        'QUIZ BOT\n'
         f'{bot.user} is connected to the following server:\n'
         f'{guild.name}(id: {guild.id})'
     )
@@ -69,7 +71,20 @@ async def whoami(ctx):
     await ctx.send(msg)
 
 
+@bot.command()
+async def questions(ctx, class_spec="none"):
+    if class_spec == "none":
+        return
+    return
+
+#
 # @bot.command()
-# async def setup(ctx):
+# aysnc def add_question(ctx: class_spec="none"):
+#     
+#
+#
+# @bot.command()
+# async def add_question(ctx, class_spec):
+
 
 bot.run(TOKEN)

@@ -1,6 +1,12 @@
 # db_utils.py
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost",
+user="root",
+password="Sentry8949254816", # y'all pls don't hack meeeee
+auth_plugin='mysql_native_password',
+database="RideShare")
 
-# import mysql.connector
+mycursor = mydb.cursor()
 
 
 class db_utils():
@@ -17,7 +23,11 @@ class db_utils():
 
     # TODO: implement add class
     def add_class(self, class_name):
-        return    
+        sql = "INSERT INTO Class VALUES (%s);"
+        vals = class_name
+        mycursor.execute(sql,vals)
+        mydb.commit()
+        print(mycursor.rowcount,"was inserted.")
 
 
     #TODO: implement add topic

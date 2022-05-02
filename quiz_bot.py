@@ -18,6 +18,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
+dbu = db_utils()
 
 
 # on ready is called when the bot logs in
@@ -28,7 +29,6 @@ async def on_ready():
         if guild.name == GUILD:
             break
     print(
-        'QUIZ BOT\n'
         f'{bot.user} is connected to the following server:\n'
         f'{guild.name}(id: {guild.id})'
     )
@@ -76,6 +76,34 @@ async def questions(ctx, class_spec="none"):
     if class_spec == "none":
         return
     return
+
+@bot.command(pass_context = True)
+async def SetUpUser(ctx):
+    msg = (
+        f'name: {ctx.message.author.name}\n'
+        f'id: {ctx.message.author.id}\n'
+    )
+    await ctx.send(msg)
+
+@bot.command()
+async def AddClass(ctx, content="none"):
+    if content == "none":
+        return
+    dbu.add_class(content)
+    return
+
+
+@bot.command()
+async def AddTopic(ctx, content="none"):
+    if content == "none":
+        return
+    dbu.add_topic(content) 
+    return
+
+
+@bot.command()
+async def 
+
 
 #
 # @bot.command()

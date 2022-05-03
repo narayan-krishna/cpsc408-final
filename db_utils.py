@@ -105,6 +105,18 @@ class db_utils():
     
     #def set_up_user(self,)
 
+    def getAnswers(self, question_id):
+        #sanitize input
+
+        #collect all the answers
+        sql_select = "SELECT answerText FROM Answer WHERE questionID = %s;"
+        
+
+        mycursor.execute(sql_select,question_id)
+        #for answer in mycursor.fetchall():
+            #display all the answers
+
+
    
 
     # close connection

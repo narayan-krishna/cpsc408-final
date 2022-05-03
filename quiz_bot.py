@@ -111,7 +111,7 @@ async def AddQuestion(ctx, class_name="none"):
 
 
 #TODO: implement get question
-async def GetQuestion(ctx, class="none"):
+async def GetQuestion(ctx, class_name="none"):
     """return question based on user class"""
     # check if it's a class or a topic
     # if its nothing then get question from any other the user's classes

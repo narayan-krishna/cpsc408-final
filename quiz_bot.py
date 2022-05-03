@@ -73,39 +73,21 @@ async def SetupUser(ctx, *args):
 
 
 @bot.command()
-async def AddMyClasses(ctx, *args):
-    """Provide user with means add classes to sched"""
-    return
-
-
-@bot.command()
-async def RemoveMyClasses(ctx, *args):
+async def RemoveClasses(ctx, *args):
     """Provide user with means remove classes from sched"""
     return
 
 
 @bot.command()
-async def AddClass(ctx, class_name="none"):
-    """Add a general class to classes table"""
-    if class_name == "none":
-        return
-    dbu.add_class(class_name)
-    await ctx.send(f'topic added: {class_name}')
-
-
-@bot.command()
-async def AddClassTopic(ctx, *args):
-    """Add class topics given specified class and list of topics"""
+async def AddClasses(ctx, *args):
+    """Add classes to db"""
     if len(args) == 0:
         err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
         await ctx.send(err_msg)
     else:
         test_msg = ""
-        for index,arg in enumerate(args):
-            if index == 0:
-                test_msg += f'class name: {arg}\n'
-            else:
-                test_msg += f'class topic: {arg}\n'
+        for class_name in args:
+            test_msg += f'class name: {class_name}\n'
         await ctx.send(test_msg)
 
     dbu.add_class_topic(args[0], args[1:len(args)])
@@ -113,10 +95,11 @@ async def AddClassTopic(ctx, *args):
 
 
 @bot.command()
-async def AddQuestion(ctx, topic_name="none"):
+async def AddQuestion(ctx, class_name="none"):
+    """gets a class as arg, prompts for question to enter"""
     #TODO: figure out how to extract topic
-    if topic_name == "none":
-        await ctx.send("Command requires topic name --> ex. '!AddQuestion relational algebra'")
+    if class_name == "none":
+        await ctx.send("Command requires class name --> ex. '!AddQuestion relational algebra'")
     else:
         msg = await get_input(ctx, "what's the question?")
 
@@ -128,8 +111,8 @@ async def AddQuestion(ctx, topic_name="none"):
 
 
 #TODO: implement get question
-async def GetQuestion(ctx, filter="none"):
-    """return list of questions from a specific topic/class/user classes"""
+async def GetQuestion(ctx, class="none"):
+    """return question based on user class"""
     # check if it's a class or a topic
     # if its nothing then get question from any other the user's classes
 
@@ -141,7 +124,6 @@ async def GetQuestion(ctx, filter="none"):
     
 
 #TODO: implement get all topics
-
 
 
 

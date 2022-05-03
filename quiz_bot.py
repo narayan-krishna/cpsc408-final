@@ -124,10 +124,15 @@ async def GetQuestion(ctx, class_name="none"):
 #TODO: implement get answers
 
 
+# KRISHNA
+
 #TODO: implement get all classes
     
 
 #TODO: implement get all topics
+
+
+#TODO: count likes
 
 
 bot.run(TOKEN)

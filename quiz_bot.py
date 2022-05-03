@@ -22,6 +22,21 @@ intents.members = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 # dbu = db_utils()
 
+# discord async get input after command
+# takes a specified prompt and timeout, returns reply (or times out)
+async def get_input(ctx, message, timeout=5):
+    await ctx.send(message)
+
+    # condition check for receiving message
+    def check(msg):
+        return msg.author == ctx.author and msg.channel == ctx.channel
+
+    try:
+        msg = await bot.wait_for("message", check=check, timeout=timeout) # 30 seconds to reply
+        return msg.content
+    except asyncio.TimeoutError:
+        await ctx.send("Sorry, you didn't reply in time!")
+        return 0
 
 # on ready is called when the bot logs in
 # BUG: this function gives diagnostic error 
@@ -37,7 +52,7 @@ async def on_ready():
     )
 
 
-@bot.command(pass_context = True)
+@bot.command()
 async def WhoAmI(ctx):
     """Returns username, id, potentially list of classes"""
     msg = (
@@ -47,7 +62,7 @@ async def WhoAmI(ctx):
     await ctx.send(msg)
 
 
-@bot.command(pass_context = True)
+@bot.command()
 async def SetupUser(ctx, *args):
     """Set up user in database and add classes to their record if added"""
     msg = (
@@ -57,14 +72,13 @@ async def SetupUser(ctx, *args):
     await ctx.send(msg)
 
 
-# 
-@bot.command(pass_context = True)
+@bot.command()
 async def AddMyClasses(ctx, *args):
     """Provide user with means add classes to sched"""
     return
 
 
-@bot.command(pass_context = True)
+@bot.command()
 async def RemoveMyClasses(ctx, *args):
     """Provide user with means remove classes from sched"""
     return
@@ -98,15 +112,6 @@ async def AddClassTopic(ctx, *args):
     return
 
 
-# NOTE: is add topic neccesary with add class topic?
-# @bot.command()
-# async def AddTopic(ctx, topic_name="none"):
-#     if topic_name == "none":
-#         return
-#     dbu.add_topic(topic_name) 
-#     return
-
-
 @bot.command()
 async def AddQuestion(ctx, topic_name="none"):
     #TODO: figure out how to extract topic
@@ -123,6 +128,10 @@ async def AddQuestion(ctx, topic_name="none"):
 
 
 #TODO: implement get question
+async def GetQuestion(ctx, filter="none"):
+    """return list of questions from a specific topic/class/user classes"""
+    # check if it's a class or a topic
+    # if its nothing then get question from any other the user's classes
 
 
 #TODO: implement get answers
@@ -133,21 +142,7 @@ async def AddQuestion(ctx, topic_name="none"):
 
 #TODO: implement get all topics
 
-# discord async get input after command
-# takes a specified prompt and timeout, returns reply (or times out)
-async def get_input(ctx, message, timeout=5):
-    await ctx.send(message)
 
-    # condition check for receiving message
-    def check(msg):
-        return msg.author == ctx.author and msg.channel == ctx.channel
-
-    try:
-        msg = await bot.wait_for("message", check=check, timeout=timeout) # 30 seconds to reply
-        return msg.content
-    except asyncio.TimeoutError:
-        await ctx.send("Sorry, you didn't reply in time!")
-        return 0
 
 
 bot.run(TOKEN)

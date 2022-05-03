@@ -61,7 +61,7 @@ async def repeat2(ctx, times: int, content="repeating..."):
     await ctx.send(msg)
 
 
-@bot.command(pass_context = True)
+@bot.command()
 async def whoami(ctx):
     msg = (
         f'name: {ctx.message.author.name}\n'

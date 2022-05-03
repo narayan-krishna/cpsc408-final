@@ -37,6 +37,7 @@ class db_utils():
         mydb.commit()
         print(mycursor.rowcount,"was inserted.")
         
+
     def add_class_topic(self, class_name: str, topic_names):
         for name in topic_names:
             sql_select = "SELECT topicID FROM Topic WHERE topicName = "+name+";"

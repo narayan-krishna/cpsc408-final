@@ -4,6 +4,7 @@
 import os
 import asyncio
 import discord
+import db_utils.py
 
 # from db_utils import db_utils
 from discord.ext import commands
@@ -20,7 +21,7 @@ intents.members = True
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
-# dbu = db_utils()
+dbu = db_utils()
 
 # discord async get input after command
 # takes a specified prompt and timeout, returns reply (or times out)
@@ -90,7 +91,7 @@ async def AddClasses(ctx, *args):
             test_msg += f'class name: {class_name}\n'
         await ctx.send(test_msg)
 
-    dbu.add_class_topic(args[0], args[1:len(args)])
+    dbu.add_class(args[0], args[1:len(args)])
     return
 
 

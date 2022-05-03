@@ -4,7 +4,6 @@
 import os
 import asyncio
 import discord
-import db_utils.py
 
 # from db_utils import db_utils
 from discord.ext import commands
@@ -21,7 +20,7 @@ intents.members = True
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
-dbu = db_utils()
+# dbu = db_utils()
 
 # discord async get input after command
 # takes a specified prompt and timeout, returns reply (or times out)
@@ -96,12 +95,7 @@ async def AddClasses(ctx, *args):
             test_msg += f'class name: {class_name}\n'
         await ctx.send(test_msg)
 
-<<<<<<< HEAD
-    dbu.add_class(args[0], args[1:len(args)])
-    return
-=======
     dbu.add_class_topic(args)
->>>>>>> a3d01aa33c9c54118ff43e5bac6b41ec2a54030d
 
 
 @bot.command()
@@ -129,8 +123,6 @@ async def GetQuestion(ctx, class_name="none"):
 
 #TODO: implement get answers
 
-
-# KRISHNA
 
 #TODO: implement get all classes
     

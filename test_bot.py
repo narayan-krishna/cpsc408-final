@@ -36,6 +36,15 @@ async def on_ready():
         print(member)
 
 
+@bot.event
+async def on_raw_reaction_add(payload):
+    channel = bot.get_channel(payload.channel_id)
+    message = await channel.fetch_message(payload.message_id)
+    user = bot.get_user(payload.user_id)
+    if payload.emoji.name == '👍':
+        await channel.send('thumbs up received!')
+
+
 @bot.command()
 async def get_date(ctx):
     await ctx.send(date.today())

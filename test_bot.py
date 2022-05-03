@@ -1,4 +1,4 @@
-# bot.py
+# test_bot.py
 # test bot provides random test commands
 
 import os

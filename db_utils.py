@@ -54,7 +54,6 @@ class db_utils():
             classID = mycursor.fetchall()
             vals = (classID,topicID)
             mycursor.execute(sql_insert,vals)
-            
 
     
     #def set_up_user(self,)

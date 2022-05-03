@@ -1,4 +1,4 @@
-# bot.py
+# client.py
 
 import os
 import discord

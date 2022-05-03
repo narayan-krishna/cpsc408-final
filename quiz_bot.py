@@ -5,7 +5,7 @@ import os
 import asyncio
 import discord
 
-from db_utils import db_utils
+# from db_utils import db_utils
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -18,8 +18,9 @@ GUILD = os.getenv('DISCORD_GUILD')
 intents = discord.Intents.default()
 intents.members = True
 
+
 bot = commands.Bot(command_prefix='!', intents=intents)
-dbu = db_utils()
+# dbu = db_utils()
 
 
 # on ready is called when the bot logs in
@@ -37,7 +38,7 @@ async def on_ready():
 
 
 @bot.command(pass_context = True)
-async def whoami(ctx):
+async def WhoAmI(ctx):
     """Returns username, id, potentially list of classes"""
     msg = (
         f'name: {ctx.message.author.name}\n'
@@ -47,7 +48,8 @@ async def whoami(ctx):
 
 
 @bot.command(pass_context = True)
-async def SetUpUser(ctx):
+async def SetupUser(ctx, *args):
+    """Set up user in database and add classes to their record if added"""
     msg = (
         f'name: {ctx.message.author.name}\n'
         f'id: {ctx.message.author.id}\n'
@@ -55,9 +57,22 @@ async def SetUpUser(ctx):
     await ctx.send(msg)
 
 
+# 
+@bot.command(pass_context = True)
+async def AddMyClasses(ctx, *args):
+    """Provide user with means add classes to sched"""
+    return
+
+
+@bot.command(pass_context = True)
+async def RemoveMyClasses(ctx, *args):
+    """Provide user with means remove classes from sched"""
+    return
+
+
 @bot.command()
 async def AddClass(ctx, class_name="none"):
-    """Add class to classes table given name"""
+    """Add a general class to classes table"""
     if class_name == "none":
         return
     dbu.add_class(class_name)
@@ -66,11 +81,9 @@ async def AddClass(ctx, class_name="none"):
 
 @bot.command()
 async def AddClassTopic(ctx, *args):
-    """Add class topics given specified class"""
+    """Add class topics given specified class and list of topics"""
     if len(args) == 0:
-        err_msg = (
-            f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism'
-        )
+        err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
         await ctx.send(err_msg)
     else:
         test_msg = ""
@@ -80,21 +93,30 @@ async def AddClassTopic(ctx, *args):
             else:
                 test_msg += f'class topic: {arg}\n'
         await ctx.send(test_msg)
+
+    dbu.add_class_topic(args[0], args[1:len(args)])
     return
 
 
-@bot.command()
-async def AddTopic(ctx, topic_name="none"):
-    if topic_name == "none":
-        return
-    dbu.add_topic(topic_name) 
-    return
+# NOTE: is add topic neccesary with add class topic?
+# @bot.command()
+# async def AddTopic(ctx, topic_name="none"):
+#     if topic_name == "none":
+#         return
+#     dbu.add_topic(topic_name) 
+#     return
 
 
 @bot.command()
 async def AddQuestion(ctx, topic_name="none"):
     #TODO: figure out how to extract topic
-    return
+    if topic_name == "none":
+        await ctx.send("Command requires topic name --> ex. '!AddQuestion relational algebra'")
+    else:
+        msg = await get_input(ctx, "what's the question?")
+
+    if msg != 0:
+        await ctx.send(f'you said {msg}')
 
 
 #TODO: implement answer question
@@ -104,14 +126,19 @@ async def AddQuestion(ctx, topic_name="none"):
 
 
 #TODO: implement get answers
+
+
+#TODO: implement get all classes
     
+
+#TODO: implement get all topics
+
 # discord async get input after command
 # takes a specified prompt and timeout, returns reply (or times out)
 async def get_input(ctx, message, timeout=5):
     await ctx.send(message)
 
-    # This will make sure that the response will only be registered if the following
-    # conditions are met:
+    # condition check for receiving message
     def check(msg):
         return msg.author == ctx.author and msg.channel == ctx.channel
 

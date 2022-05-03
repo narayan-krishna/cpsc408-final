@@ -59,6 +59,8 @@ async def WhoAmI(ctx):
         f'name: {ctx.message.author.name}\n'
         f'id: {ctx.message.author.id}\n'
     )
+
+    # TODO: query print user classes
     await ctx.send(msg)
 
 
@@ -69,9 +71,11 @@ async def SetupUser(ctx, *args):
         f'name: {ctx.message.author.name}\n'
         f'id: {ctx.message.author.id}\n'
     )
+    # TODO: get user classes as inputs
     await ctx.send(msg)
 
 
+#TODO: begin implement
 @bot.command()
 async def RemoveClasses(ctx, *args):
     """Provide user with means remove classes from sched"""
@@ -84,14 +88,14 @@ async def AddClasses(ctx, *args):
     if len(args) == 0:
         err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
         await ctx.send(err_msg)
+        return
     else:
         test_msg = ""
         for class_name in args:
             test_msg += f'class name: {class_name}\n'
         await ctx.send(test_msg)
 
-    dbu.add_class_topic(args[0], args[1:len(args)])
-    return
+    dbu.add_class_topic(args)
 
 
 @bot.command()
@@ -124,7 +128,6 @@ async def GetQuestion(ctx, class_name="none"):
     
 
 #TODO: implement get all topics
-
 
 
 bot.run(TOKEN)

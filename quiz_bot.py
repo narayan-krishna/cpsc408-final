@@ -1,6 +1,7 @@
 # quiz_bot.py
 # implement main bot fuctionality
 
+from email import message
 import os
 import asyncio
 import discord
@@ -8,6 +9,8 @@ import discord
 # from db_utils import db_utils
 from discord.ext import commands
 from dotenv import load_dotenv
+
+from db_utils import db_utils
 
 
 load_dotenv()
@@ -20,7 +23,7 @@ intents.members = True
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
-# dbu = db_utils()
+dbu = db_utils()
 
 # discord async get input after command
 # takes a specified prompt and timeout, returns reply (or times out)
@@ -65,13 +68,14 @@ async def WhoAmI(ctx):
 
 
 @bot.command()
-async def SetupUser(ctx, *args):
+async def SetupUser(ctx):
     """Set up user in database and add classes to their record if added"""
-    msg = (
-        f'name: {ctx.message.author.name}\n'
-        f'id: {ctx.message.author.id}\n'
-    )
-    # TODO: get user classes as inputs
+    userID = str(ctx.message.author.id)
+    userName = str(ctx.message.author.name)
+    
+    print("\n\n\nDEBUG: "+userID + userName +"\n\n\n")
+    dbu.add_user(userID,userName)
+    msg = "You've been added to the database!\n"
     await ctx.send(msg)
 
 

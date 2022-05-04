@@ -42,12 +42,7 @@ class db_utils():
         classID = mycursor.fetchall()
         return classID
 
-<<<<<<< HEAD
     def add_class_member(self,classID,userID):
-=======
-
-    def add_class_member(classID,userID):
->>>>>>> edd1f071173c403a5aaf2554693e1222b6c4194f
         class_member_insert = "INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);"
         vals = (classID,userID)
         mycursor.execute(class_member_insert,vals)
@@ -65,6 +60,8 @@ class db_utils():
         mycursor.execute(sql_insert)
         mydb.commit()
         print("Makes it through first execute.")
+
+    
         
 
     def add_user(self,discord_user_id, user_name): 

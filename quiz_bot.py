@@ -124,6 +124,7 @@ async def AddQuestion(ctx, class_name="none"):
         await ctx.send("Command requires class name --> ex. '!AddQuestion relational algebra'")
     else:
         msg = await get_input(ctx, "what's the question?")
+        dbu.add_question(ctx.message.author.id,msg)
 
     if msg != 0:
         await ctx.send(f'you said {msg}')

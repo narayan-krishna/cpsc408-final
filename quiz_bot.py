@@ -134,10 +134,11 @@ async def AddQuestion(ctx, class_name="none"):
 
 
 #TODO: implement get question
-async def GetQuestion(ctx, class_name="none"):
+@bot.command()
+async def GetQuestion(ctx):
     """return question based on user class"""
     # if its nothing then get question from any other the user's classes
-
+    await ctx.send(dbu.get_question(ctx.message.author.id))
 
 #TODO: implement get answers
 

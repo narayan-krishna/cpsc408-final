@@ -98,18 +98,16 @@ class db_utils():
 
 
     def get_question(self,userID):
-        rand_class_select = "SELECT classID FROM ClassMemeber WHERE userID = %s;"
         if(self.sql_injection_check(userID)): 
-            vals = userID
+            vals = (
+                (userID,)
+            )
         else: 
             return
-        mycursor.execute(rand_class_select,vals)
-        classes = mycursor.fetchall()
-        random_index = random.randint(0,len(classes)-1)
-        rand_question_select = "SELECT * FROM Question ORDER BY RAND() WHERE classID = %s LIMIT 1;"
-        mycursor.execute(rand_question_select,classes[random_index])
-        mydb.commit()
-        print(mycursor.rowcount,"was inserted.")
+        rand_question_select = "SELECT * FROM Question WHERE userID = %s ORDER BY RAND() LIMIT 1;"
+        mycursor.execute(rand_question_select,vals)
+        question = mycursor.fetchall()
+        return question
 
 
     def get_answer(self,questionID): 

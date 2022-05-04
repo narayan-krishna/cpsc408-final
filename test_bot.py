@@ -18,6 +18,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
+bot.count = 1
 
 
 # on ready is called when the bot logs in
@@ -35,6 +36,7 @@ async def on_ready():
     for member in guild.members:
         print(member)
 
+bot.thumb_count = 0
 
 @bot.event
 async def on_raw_reaction_add(payload):
@@ -42,8 +44,17 @@ async def on_raw_reaction_add(payload):
     message = await channel.fetch_message(payload.message_id)
     user = bot.get_user(payload.user_id)
     if payload.emoji.name == '👍':
-        await channel.send('thumbs up received!')
+        bot.thumb_count += 1
+        msg = (
+                f'thumbs up received\n'
+                f'thumb count: {bot.thumb_count}'
+                )
+        await channel.send(msg)
 
+@bot.command()
+async def pick(ctx):
+    bot.count += 1
+    await ctx.send(f'counter at {bot.count}')
 
 @bot.command()
 async def get_date(ctx):

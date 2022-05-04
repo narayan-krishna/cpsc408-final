@@ -31,6 +31,7 @@ class db_utils():
         else: 
             return True
 
+
     def get_class_id(self,class_name): 
         classID_query = "SELECT classID FROM Class WHERE className = %s;"
         vals = (
@@ -41,12 +42,14 @@ class db_utils():
         classID = mycursor.fetchall()
         return classID
 
+
     def add_class_member(classID,userID):
         class_member_insert = "INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);"
         vals = (classID,userID)
         mycursor.execute(class_member_insert,vals)
         mydb.commit()
         print(mycursor.rowcount,"was inserted.")
+
 
     def add_class(self, userID, class_name):
         #insert the class into the class table
@@ -71,6 +74,7 @@ class db_utils():
         mydb.commit()
         print(mycursor.rowcount,"was inserted.")
 
+
     def add_question(self, user_id, question_text): 
         sql_insert = "INSERT INTO Question (userID,questionText) VALUES (%s,%s);" 
         if (self.sql_injection_check(user_id) and self.sql_injection_check(question_text)): 
@@ -81,6 +85,7 @@ class db_utils():
         mydb.commit() 
         print(mycursor.rowcount,"was inserted.")
 
+
     def answer_question(self,userID,questionID,answerText): 
         sql_insert = "INSERT INTO ANSWER (userID,questionID,answerText) VALUES (%s,%s,%s);"
         if(self.sql_injection_check(userID) and self.sql_injection_check(questionID) and self.sql_injection_check(answerText)):
@@ -90,6 +95,7 @@ class db_utils():
         mycursor.execute(sql_insert,vals)
         mydb.commit()
         print(mycursor.rowcount,"was inserted.")
+
 
     def get_question(self,userID):
         rand_class_select = "SELECT classID FROM ClassMemeber WHERE userID = %s;"
@@ -104,6 +110,7 @@ class db_utils():
         mycursor.execute(rand_question_select,classes[random_index])
         mydb.commit()
         print(mycursor.rowcount,"was inserted.")
+
 
     def get_answer(self,questionID): 
         sql_select = "SELECT answerText FROM Answer WHERE questionID = %s;"

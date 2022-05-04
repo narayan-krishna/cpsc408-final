@@ -42,26 +42,29 @@ class db_utils():
         classID = mycursor.fetchall()
         return classID
 
+<<<<<<< HEAD
+    def add_class_member(self,classID,userID):
+=======
 
     def add_class_member(classID,userID):
+>>>>>>> edd1f071173c403a5aaf2554693e1222b6c4194f
         class_member_insert = "INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);"
         vals = (classID,userID)
         mycursor.execute(class_member_insert,vals)
         mydb.commit()
         print(mycursor.rowcount,"was inserted.")
 
-
-    def add_class(self, userID, class_name):
+    def add_class(self, userID,class_name):
         #insert the class into the class table
-        sql_insert = "INSERT INTO Class (className) VALUES (%s); SELECT classID FROM Class WHERE className = %s;"
-        #if(self.sql_injection_check(class_name)):
-        vals = (
-            (class_name,class_name)
-        )
-        mycursor.execute(sql_insert,vals)
+        sql_insert = '''START TRANSACTION; 
+        SELECT @id:=MAX(classID)+1 FROM Class; 
+        INSERT INTO ClassMember (classID,userID) VALUES (@id,'''+str(userID)+''');
+        INSERT INTO Class VALUES ('''+class_name+'''); 
+        COMMIT;'''
+
+        mycursor.execute(sql_insert)
         mydb.commit()
         print("Makes it through first execute.")
-        "INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);"
         
 
     def add_user(self,discord_user_id, user_name): 

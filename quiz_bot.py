@@ -73,7 +73,7 @@ async def SetupUser(ctx):
     userID = str(ctx.message.author.id)
     userName = str(ctx.message.author.name)
     
-    print("\n\n\nDEBUG: "+userID + userName +"\n\n\n")
+    #print("\n\n\nDEBUG: "+userID + userName +"\n\n\n")
     dbu.add_user(userID,userName)
     msg = "You've been added to the database!\n"
     await ctx.send(msg)
@@ -87,19 +87,16 @@ async def RemoveClasses(ctx, *args):
 
 
 @bot.command()
-async def AddClasses(ctx, *args):
+async def AddClass(ctx, *args):
     """Add classes to db"""
-    if len(args) == 0:
-        err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
-        await ctx.send(err_msg)
+    if len(args) == 1:
+        dbu.add_class(ctx.message.author.id,args[0])
+        #err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
+        #await ctx.send(err_msg)
         return
     else:
-        test_msg = ""
-        for class_name in args:
-            test_msg += f'class name: {class_name}\n'
-        await ctx.send(test_msg)
-
-    dbu.add_class_topic(args)
+        err_msg = (f'Command only takes one argument as input, the name of the class.')
+        await ctx.send(err_msg)
 
 
 @bot.command()

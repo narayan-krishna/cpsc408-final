@@ -35,6 +35,9 @@ async def on_ready():
         print(member)
 
 
+# def parse_heading(msg):
+#     type, id
+#     if (msg[])
 
 @bot.event
 async def on_raw_reaction_add(payload):
@@ -49,7 +52,7 @@ async def on_raw_reaction_add(payload):
                         "this message was sent by the bot\n"
                         f'the message content is \n{message.content}'
                     ) 
-                
+
             msg += (
                     f'thumbs up received\n'
                     f'user: {user}\n'

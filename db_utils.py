@@ -42,12 +42,14 @@ class db_utils():
         classID = mycursor.fetchall()
         return classID
 
+
     def add_class_member(self,classID,userID):
         class_member_insert = "INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);"
         vals = (classID,userID)
         mycursor.execute(class_member_insert,vals)
         mydb.commit()
         print(mycursor.rowcount,"was inserted.")
+
 
     def add_class(self, userID,class_name):
         #insert the class into the class table
@@ -62,7 +64,7 @@ class db_utils():
         print("Makes it through first execute.")
 
     
-        
+            
 
     def add_user(self,discord_user_id, user_name): 
         sql_insert = "INSERT INTO User VALUES (%s,%s);"
@@ -134,7 +136,10 @@ class db_utils():
         #for answer in mycursor.fetchall():
             #display all the answers
 
-
+    
+    #TODO: implement increment of like count for a specific answer
+    def increment_likes(self, answer_id):
+        return
    
 
     # close connection

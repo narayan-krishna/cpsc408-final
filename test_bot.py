@@ -18,11 +18,9 @@ intents = discord.Intents.default()
 intents.members = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
-bot.count = 1
 
 
 # on ready is called when the bot logs in
-# BUG: this function gives a diagnostic error that guild is possibly unbound?
 @bot.event
 async def on_ready():
     for guild in bot.guilds:
@@ -36,25 +34,37 @@ async def on_ready():
     for member in guild.members:
         print(member)
 
-bot.thumb_count = 0
+
 
 @bot.event
 async def on_raw_reaction_add(payload):
     channel = bot.get_channel(payload.channel_id)
     message = await channel.fetch_message(payload.message_id)
     user = bot.get_user(payload.user_id)
-    if payload.emoji.name == '👍':
-        bot.thumb_count += 1
-        msg = (
-                f'thumbs up received\n'
-                f'thumb count: {bot.thumb_count}'
-                )
-        await channel.send(msg)
+    if message.author.id == bot.user.id:
+        if payload.emoji.name == '👍':
 
-@bot.command()
-async def pick(ctx):
-    bot.count += 1
-    await ctx.send(f'counter at {bot.count}')
+            msg = ""
+                msg += (
+                        "this message was sent by the bot\n"
+                        f'the message content is \n{message.content}'
+                    ) 
+                
+            msg += (
+                    f'thumbs up received\n'
+                    f'user: {user}\n'
+                    f'channel id: {channel}\n'
+                    f'message author: {message.author}\n'
+                    f'message author id: {message.author.id}\n'
+                )
+            await channel.send(msg)
+
+
+# @bot.command()
+# async def pick(ctx):
+#     bot.count += 1
+#     await ctx.send(f'counter at {bot.count}')
+
 
 @bot.command()
 async def get_date(ctx):

@@ -122,12 +122,6 @@ class db_utils():
         answers = mycursor.fetchall()
         for answer in answers: 
             print(answer)
-
-
-
-
-            
-
     
     #def set_up_user(self,)
 

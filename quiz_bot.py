@@ -41,6 +41,7 @@ async def get_input(ctx, message, timeout=5):
         await ctx.send("Sorry, you didn't reply in time!")
         return 0
 
+
 # on ready is called when the bot logs in
 # BUG: this function gives diagnostic error 
 #   "guild is possibly unbound?"
@@ -53,6 +54,22 @@ async def on_ready():
         f'{bot.user} is connected to the following server:\n'
         f'{guild.name}(id: {guild.id})'
     )
+
+
+# track emojis on questions
+@bot.event
+async def on_raw_reaction_add(payload):
+    channel = bot.get_channel(payload.channel_id)
+    message = await channel.fetch_message(payload.message_id)
+    user = bot.get_user(payload.user_id)
+    if payload.emoji.name == '👍':
+        # NOTE: how do i recognize an answer???
+        msg = ""
+        msg += (
+                f'thumbs up received\n'
+                f'thumb count: {bot.thumb_count}'
+                )
+        await channel.send(msg)
 
 
 @bot.command()

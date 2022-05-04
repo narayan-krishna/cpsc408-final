@@ -24,8 +24,8 @@ class db_utils():
         # print("connection made..")
 
 
-    def sql_injection_check(string): 
-        if (string.find("DROP") != -1) or (string.find("SELECT") != -1) or (string.find("UPDATE") != -1) or (string.find("DELETE") != -1) or (string.find("INSERT") != -1): 
+    def sql_injection_check(self,string): 
+        if (str(string).find("DROP") != -1) or (str(string).find("SELECT") != -1) or (str(string).find("UPDATE") != -1) or (str(string).find("DELETE") != -1) or (str(string).find("INSERT") != -1): 
             print("Sorry, input was suspect and so was dropped for your security.")
             return False
         else: 

@@ -123,7 +123,7 @@ async def AddQuestion(ctx, class_name="none"):
     if class_name == "none":
         await ctx.send("Command requires class name --> ex. '!AddQuestion relational algebra'")
     else:
-        msg = await get_input(ctx, "what's the question?")
+        msg = await get_input(ctx, "what's the question?",30)
         dbu.add_question(ctx.message.author.id,msg)
 
     if msg != 0:
@@ -136,7 +136,6 @@ async def AddQuestion(ctx, class_name="none"):
 #TODO: implement get question
 async def GetQuestion(ctx, class_name="none"):
     """return question based on user class"""
-    # check if it's a class or a topic
     # if its nothing then get question from any other the user's classes
 
 

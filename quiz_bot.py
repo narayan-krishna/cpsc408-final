@@ -131,6 +131,19 @@ async def AddClass(ctx, *args):
         err_msg = (f'Command only takes one argument as input, the name of the class.')
         await ctx.send(err_msg)
 
+@bot.command()
+async def DropClass(ctx, *args):
+    """Add classes to db"""
+    if len(args) == 1:
+        dbu.drop_class(ctx.message.author.id,args[0])
+        #err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
+        #await ctx.send(err_msg)
+        msg = (f'Class Dropped.')
+        await ctx.send(msg)
+    else:
+        err_msg = (f'Command only takes one argument as input, the name of the class.')
+        await ctx.send(err_msg)
+
 
 @bot.command()
 async def AddQuestion(ctx, class_name="none"):

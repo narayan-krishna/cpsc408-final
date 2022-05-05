@@ -62,12 +62,35 @@ class db_utils():
         sql_select =  "SELECT @id:=MAX(classID) FROM Class;"
         mycursor.execute(sql_select)
         classID = mycursor.fetchone()
-        print("\n\n\n"+str(classID)+"\n\n\n")
         sql_classMember_insert = '''INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);'''
         vals = (str(classID[0]),str(userID))
         
         mycursor.execute(sql_classMember_insert,vals)
         mydb.commit()
+        print("Makes it through first execute.")
+
+    def drop_class(self, userID,class_name):
+        #drop class from the class and classMember table
+        sql_select = "SELECT classID FROM Class WHERE className = %s;"
+        vals = (str(class_name),)
+        mycursor.execute(sql_select,vals)
+        classID = mycursor.fetchall()
+        mycursor.close()
+        mydb2 = mysql.connector.connect(host="localhost",
+        user="root",
+        password="Sentry8949254816", # y'all pls don't hack meeeee
+        auth_plugin='mysql_native_password',
+        database="WizBot")
+        mycursor2 = mydb2.cursor()
+        print("\n\n\n"+str(classID)+"\n\n\n")
+        sql_transaction = '''START TRANSACTION; 
+                                DELETE FROM ClassMember WHERE classID = %s;
+                                COMMIT;'''
+        vals = (
+            str(classID[0]),
+        )
+        mycursor2.execute(sql_transaction,vals)
+        mydb2.commit()
         print("Makes it through first execute.")
 
     

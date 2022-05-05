@@ -82,9 +82,11 @@ async def on_raw_reaction_add(payload):
     if message.author.id == bot.user.id:
         if payload.emoji.name == '👍':
             type, table_id = parse_msg(message.content)
-            if type == 'A':
+            print("\n\n\n"+str(type)+"\n\n\n")
+            #print("\n\n\n"+str(table_id)+"\n\n\n")
+            if table_id == 'A':
                 # do something wtih type, table_id
-                # increment_likes(table_id)
+                dbu.increment_likes(type)
                 print('A')
             msg = "a bot message received a like"
             await channel.send(msg)
@@ -199,10 +201,15 @@ async def GetAnswers(ctx, question_id=None):
         await ctx.send("Command requires a question id --> ex. '!AnswerQuestion 1101'")
     else:
         # TODO: implement dbutils funciton to to return all answers
-        # msg = ""
-        # for answer in db_utils.get_answer():
-        #     msg += answer
-        # await ctx.send(msg)
+        msg = ""
+        answerValues = db_utils.get_answer(question_id)
+        answerIds = answerValues[0]
+        answerTexts = answerValues[1]
+        inc = 0
+        for answerID in answerIds: 
+            msg = "[A "+str(answerID[0])+"] "+str(answerTexts[inc][0])
+            await ctx.send(msg)
+            inc += 1
         return
 
 

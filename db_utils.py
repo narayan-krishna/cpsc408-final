@@ -138,25 +138,32 @@ class db_utils():
         return returnList
 
 
-    def get_answer(self,questionID): 
-        sql_select = "SELECT answerText FROM Answer WHERE questionID = %s;"
-        if(self.sql_injection_check(questionID)): 
-            vals = questionID
-        else: 
-            return
-        mycursor.execute(sql_select,vals)
-        answers = mycursor.fetchall()
+    def get_answer(questionID): 
+        sql_answerid_select = "SELECT answerID FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
+        sql_answertext_select = "SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
+        #if(sql_injection_check(questionID)): 
+        vals = (
+            (questionID,)
+        )
+        #else: 
+        #    return
+        mycursor.execute(sql_answerid_select,vals)
+        answerIDs = mycursor.fetchall()
+        mycursor.execute(sql_answertext_select,vals)
+        answerTexts = mycursor.fetchall()
+       
         # TODO: TEST RETURNING TUPLE
-        answer_tuple = ()
-        for answer in answers: 
-            print(answer)
-            answer_tuple += answer
 
-        return answer_tuple
+        return (answerIDs,answerTexts)
 
     
     #TODO: implement increment of like count for a specific answer
     def increment_likes(self, answer_id):
+        print("MAKES IT TO INCREMENT LIKES.")
+        sql_update = "UPDATE Answer SET likes = likes + 1 WHERE answerID ="+str(answer_id)+""
+        print(sql_update)
+        mycursor.execute(sql_update)
+        mydb.commit()
         return
    
 

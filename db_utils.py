@@ -71,23 +71,19 @@ class db_utils():
 
     def drop_class(self, userID,class_name):
         #drop class from the class and classMember table
-        mycursor = mydb.cursor()
         sql_select = "SELECT classID FROM Class WHERE className = %s;"
         vals = (str(class_name),)
         mycursor.execute(sql_select,vals)
         classID = mycursor.fetchall()
-        more = True
-        while more: 
-            more = mycursor.nextset()
-        mycursor.close()
-        mycursor = mydb.cursor()
-        #print("\n\n\n"+str(classID)+"\n\n\n")
-        sql_transaction = '''START TRANSACTION; 
-                            COMMIT;'''
-        #vals = (
-        #    str(classID[0]),userID
-        #    )
+        sql_transaction = '''START TRANSACTION;'''
         mycursor.execute(sql_transaction)
+        sql_delete_class_member = '''DELETE FROM ClassMember WHERE classID = %s;''' % classID[0]
+        mycursor.execute(sql_delete_class_member)
+        sql_delete_class = '''DELETE FROM Class WHERE className = "%s";''' % class_name
+        mycursor.execute(sql_delete_class)
+        sql_commit = '''COMMIT;'''
+        mycursor.execute(sql_commit)
+                            
         mydb.commit()
         print("Makes it through first execute.")
 

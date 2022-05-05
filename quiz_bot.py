@@ -172,6 +172,7 @@ async def AddQuestion(ctx, class_name= None):
 
 
 #TODO: implement answer question (NEEDS TESTING)
+@bot.command()
 async def AnswerQuestion(ctx, question_id=None):
     """Answer a question given its id"""
     if question_id == None:
@@ -187,7 +188,7 @@ async def AnswerQuestion(ctx, question_id=None):
 async def GetQuestion(ctx):
     """Return a random question from your class"""
     # if its nothing then get question from any other the user's classes
-    await ctx.send(dbu.get_question(ctx.message.author.id))
+    await ctx.send("Question ID: "+str(dbu.get_question(ctx.message.author.id)[0])+"\n"+str(dbu.get_question(ctx.message.author.id)[1]))
 
 
 #TODO: implement get all answers for a question (HMMMM)

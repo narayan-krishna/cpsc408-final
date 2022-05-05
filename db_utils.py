@@ -63,7 +63,7 @@ class db_utils():
         mycursor.execute(sql_select)
         classID = mycursor.fetchall()
         sql_classMember_insert = '''INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);'''
-        vals = (str(classID[0]),str(userID))
+        vals = (str(classID[0][0]),str(userID))
         
         mycursor.execute(sql_classMember_insert,vals)
         mydb.commit()
@@ -134,7 +134,8 @@ class db_utils():
         rand_question_select = "SELECT * FROM Question WHERE userID = %s ORDER BY RAND() LIMIT 1;"
         mycursor.execute(rand_question_select,vals)
         question = mycursor.fetchall()
-        return question
+        returnList = [question[0][0],question[0][2]]
+        return returnList
 
 
     def get_answer(self,questionID): 
@@ -152,19 +153,6 @@ class db_utils():
             answer_tuple += answer
 
         return answer_tuple
-    
-    #def set_up_user(self,)
-
-    def getAnswers(self, question_id):
-        #sanitize input
-
-        #collect all the answers
-        sql_select = "SELECT answerText FROM Answer WHERE questionID = %s;"
-        
-
-        mycursor.execute(sql_select,question_id)
-        #for answer in mycursor.fetchall():
-            #display all the answers
 
     
     #TODO: implement increment of like count for a specific answer

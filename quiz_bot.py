@@ -69,6 +69,8 @@ async def on_ready():
 
 
 #TODO: NEEDS TESTING
+#BUG: Doesn't look at total number of reacts
+# Should use https://stackoverflow.com/questions/64842656/how-can-i-count-the-number-of-reactions-in-discord-js instead
 # track emojis on questions
 @bot.event
 async def on_raw_reaction_add(payload):
@@ -90,23 +92,25 @@ async def on_raw_reaction_add(payload):
 
 @bot.command()
 async def WhoAmI(ctx):
-    """Returns username, id, potentially list of classes"""
+    """Returns username, id, and list of classes"""
     msg = (
         f'name: {ctx.message.author.name}\n'
         f'id: {ctx.message.author.id}\n'
     )
 
-    # TODO: query print user classes
     await ctx.send(msg)
+    # TODO: query print user classes
+    await ctx.send("[UNIMPLEMENTED]: Classes: ")
 
 
 @bot.command()
+#TODO: Should this be on Login instead of when the user types it?
 async def SetupUser(ctx):
-    """Set up user in database and add classes to their record if added"""
+    """Sets you up in our database"""
     userID = str(ctx.message.author.id)
     userName = str(ctx.message.author.name)
     
-    #print("\n\n\nDEBUG: "+userID + userName +"\n\n\n")
+    #TODO: Don't add to database if userID exists
     dbu.add_user(userID,userName)
     msg = "You've been added to the database!\n"
     await ctx.send(msg)
@@ -114,43 +118,47 @@ async def SetupUser(ctx):
 
 #TODO: begin implement
 @bot.command()
-async def RemoveClasses(ctx, *args):
-    """Provide user with means remove classes from sched"""
-    return
+async def RemoveClass(ctx, classToRemove = None):
+    """Remove the class specified by [classToRemove]"""
+    if classToRemove == None:
+        await ctx.send("Usage: !RemoveClass [classToRemove]")
+        return
+    await ctx.send("[UNIMPLEMENTED]: Removing class {}".format(classToRemove))
 
 
 @bot.command()
-async def AddClass(ctx, *args):
-    """Add classes to db"""
-    if len(args) == 1:
-        dbu.add_class(ctx.message.author.id,args[0])
+async def AddClass(ctx, classToAdd = None, *args):
+    """Add [classToAdd] to classes in database"""
+
+    if len(args) == 0 and classToAdd != None:
+        dbu.add_class(ctx.message.author.id, classToAdd)
         #err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
         #await ctx.send(err_msg)
         return
     else:
-        err_msg = (f'Command only takes one argument as input, the name of the class.')
+        err_msg = (f'Usage: !AddClass [classToAdd]')
         await ctx.send(err_msg)
 
 @bot.command()
-async def DropClass(ctx, *args):
-    """Add classes to db"""
-    if len(args) == 1:
-        dbu.drop_class(ctx.message.author.id,args[0])
+async def DropClass(ctx, classToDrop = None, *args):
+    """Drops User from Class"""
+    if len(args) == 0 and classToDrop != None:
+        dbu.drop_class(ctx.message.author.id, classToDrop)
         #err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
         #await ctx.send(err_msg)
         msg = (f'Class Dropped.')
         await ctx.send(msg)
     else:
-        err_msg = (f'Command only takes one argument as input, the name of the class.')
+        err_msg = (f'Usage: !DropClass [classToDrop]')
         await ctx.send(err_msg)
 
 
 @bot.command()
-async def AddQuestion(ctx, class_name="none"):
-    """gets a class as arg, prompts for question to enter"""
-    #TODO: figure out how to extract topic
-    if class_name == "none":
-        await ctx.send("Command requires class name --> ex. '!AddQuestion relational algebra'")
+async def AddQuestion(ctx, class_name= None):
+    """Prompts User to add Question to specific class"""
+    #TODO: Should the user be prompted for the class if they don't enter it?
+    if class_name == None:
+        await ctx.send("Usage: !AddQuestion [className]")
     else:
         msg = await get_input(ctx, "what's the question?",30)
         dbu.add_question(ctx.message.author.id,msg)
@@ -160,27 +168,29 @@ async def AddQuestion(ctx, class_name="none"):
 
 
 #TODO: implement answer question (NEEDS TESTING)
-async def AnswerQuestion(ctx, question_id="none"):
-    if question_id == "none":
-        await ctx.send("Command requires a question id --> ex. '!AnswerQuestion 1101'")
+async def AnswerQuestion(ctx, question_id=None):
+    """Answer a question given its id"""
+    if question_id == None:
+        await ctx.send("Usage: !AnswerQuestion [questionID]")
     else:
-        msg = await get_input(ctx, "what's your answer to the question?",30)
+        #TODO: Should we print the question?
+        msg = await get_input(ctx, "What's your answer to the question?",30)
         dbu.answer_question(ctx.message.author.id,question_id,msg)
 
 
 #TODO: implement get question
 @bot.command()
 async def GetQuestion(ctx):
-    """return question based on user class"""
+    """Return a random question from your class"""
     # if its nothing then get question from any other the user's classes
     await ctx.send(dbu.get_question(ctx.message.author.id))
 
 
 #TODO: implement get all answers for a question (HMMMM)
 @bot.command()
-async def GetAnswers(ctx, question_id="none"):
-    """get answers for a specific topic"""
-    if question_id == "none":
+async def GetAnswers(ctx, question_id=None):
+    """Get answers for a specific question"""
+    if question_id == None:
         await ctx.send("Command requires a question id --> ex. '!AnswerQuestion 1101'")
     else:
         # TODO: implement dbutils funciton to to return all answers
@@ -190,11 +200,12 @@ async def GetAnswers(ctx, question_id="none"):
 
 
 # #TODO: implement get all classes
-# @bot.command()
-# async def GetClasses(ctx):
-#     """return a list of classes"""
-#     # get all classes from dbu.something
-#     return
+@bot.command()
+async def GetClasses(ctx):
+    """Returns a list of all classes"""
+    await ctx.send("[UNIMPLEMENTED]: Returning a list of all classes")
+    # get all classes from dbu.something
+    return
 
 
 bot.run(TOKEN)

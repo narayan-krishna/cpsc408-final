@@ -174,7 +174,12 @@ class db_utils():
         mycursor.execute(sql_get_all)
         all_texts = mycursor.fetchall()
 
-        f = open("quizbot_report.csv", "a")
+        file = open("quizbot_report.csv", "w")
+        for x in all_texts:
+            for y in x:
+                file.write(str(y) + ',')
+            file.write('\n')
+        file.close()
 
         print(all_texts)
    

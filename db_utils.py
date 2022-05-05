@@ -95,10 +95,11 @@ class db_utils():
         if(self.sql_injection_check(discord_user_id) and self.sql_injection_check(user_name)): 
             vals = (discord_user_id,user_name)
         else: 
-            return
+            return 0
         mycursor.execute(sql_insert,vals)
         mydb.commit()
         print(mycursor.rowcount,"was inserted.")
+        return 1
 
 
     def add_question(self, user_id, question_text): 
@@ -144,8 +145,13 @@ class db_utils():
             return
         mycursor.execute(sql_select,vals)
         answers = mycursor.fetchall()
+        # TODO: TEST RETURNING TUPLE
+        answer_tuple = ()
         for answer in answers: 
             print(answer)
+            answer_tuple += answer
+
+        return answer_tuple
     
     #def set_up_user(self,)
 

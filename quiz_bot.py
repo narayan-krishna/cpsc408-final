@@ -110,10 +110,14 @@ async def SetupUser(ctx):
     userID = str(ctx.message.author.id)
     userName = str(ctx.message.author.name)
     
-    #TODO: Don't add to database if userID exists
-    dbu.add_user(userID,userName)
-    msg = "You've been added to the database!\n"
-    await ctx.send(msg)
+    #TODO: Don't add to database if userID exists -- test success check
+    success = dbu.add_user(userID,userName)
+    if success == 1:
+        msg = "You've been added to the database!\n"
+        await ctx.send(msg)
+    else:
+        msg = "You're id exists within databse\n"
+        await ctx.send(msg)
 
 
 #TODO: begin implement
@@ -194,7 +198,9 @@ async def GetAnswers(ctx, question_id=None):
         await ctx.send("Command requires a question id --> ex. '!AnswerQuestion 1101'")
     else:
         # TODO: implement dbutils funciton to to return all answers
-        # msg = dbu.??()
+        # msg = ""
+        # for answer in db_utils.get_answer():
+        #     msg += answer
         # await ctx.send(msg)
         return
 

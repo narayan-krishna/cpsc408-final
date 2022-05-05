@@ -53,13 +53,20 @@ class db_utils():
 
     def add_class(self, userID,class_name):
         #insert the class into the class table
-        sql_insert = '''START TRANSACTION; 
-        SELECT @id:=MAX(classID)+1 FROM Class; 
-        INSERT INTO ClassMember (classID,userID) VALUES (@id,'''+str(userID)+''');
-        INSERT INTO Class VALUES ('''+class_name+'''); 
-        COMMIT;'''
-
-        mycursor.execute(sql_insert)
+        sql_insert = "INSERT INTO Class(className) VALUES (%s);"
+        vals = ( 
+            (class_name,)
+        )
+        mycursor.execute(sql_insert,vals)
+        mydb.commit()
+        sql_select =  "SELECT @id:=MAX(classID) FROM Class;"
+        mycursor.execute(sql_select)
+        classID = mycursor.fetchone()
+        print("\n\n\n"+str(classID)+"\n\n\n")
+        sql_classMember_insert = '''INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);'''
+        vals = (str(classID[0]),str(userID))
+        
+        mycursor.execute(sql_classMember_insert,vals)
         mydb.commit()
         print("Makes it through first execute.")
 

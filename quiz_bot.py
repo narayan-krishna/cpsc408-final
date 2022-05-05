@@ -222,4 +222,11 @@ async def GetClasses(ctx):
     return
 
 
+#TODO: print this to a file
+@bot.command()
+async def GetReport(ctx):
+    dbu.generate_csv()
+    return
+
+
 bot.run(TOKEN)

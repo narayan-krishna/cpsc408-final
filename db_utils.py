@@ -4,7 +4,7 @@ import random
 
 mydb = mysql.connector.connect(host="localhost",
 user="root",
-password="Sentry8949254816", # y'all pls don't hack meeeee
+password="P5rv5th2!", # y'all pls don't hack meeeee
 auth_plugin='mysql_native_password',
 database="WizBot")
 
@@ -139,6 +139,7 @@ class db_utils():
 
 
     def get_answer(questionID): 
+        #NOTE: can do in one query?
         sql_answerid_select = "SELECT answerID FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
         sql_answertext_select = "SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
         #if(sql_injection_check(questionID)): 
@@ -165,6 +166,17 @@ class db_utils():
         mycursor.execute(sql_update)
         mydb.commit()
         return
+
+
+    #TODO: implement csv file generation
+    def generate_csv(self):
+        sql_get_all = "SELECT * FROM class;"
+        mycursor.execute(sql_get_all)
+        all_texts = mycursor.fetchall()
+
+        f = open("quizbot_report.csv", "a")
+
+        print(all_texts)
    
 
     # close connection

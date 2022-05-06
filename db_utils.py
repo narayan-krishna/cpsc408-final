@@ -1,15 +1,17 @@
 # db_utils.py
 # implements main database utilities with mysql queries
 
+from turtle import update
 import mysql.connector
 import random
 
 
 mydb = mysql.connector.connect(host="localhost",
 user="root",
-password="P5rv5th2!", # y'all pls don't hack meeeee
+password="Sentry8949254816",
 auth_plugin='mysql_native_password',
-database="WizBot")
+database="RideShare")
+#print(mydb)
 
 
 mycursor = mydb.cursor()
@@ -169,6 +171,13 @@ class db_utils():
         # TODO: TEST RETURNING TUPLE
 
         return (answerIDs,answerTexts)
+
+    def update_answer(userID,answerID,newAnswerText): 
+        update_query = "UPDATE Answer SET answerText ="+str(newAnswerText)+" WHERE answerID = "+str(answerID)+"AND userID ="+userID+";"
+        mycursor.execute(update_query)
+        mydb.commit()
+        
+
 
     
     # increments likes of a specific answer when the answer is liked

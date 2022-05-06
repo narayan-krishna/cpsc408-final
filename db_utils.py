@@ -218,6 +218,13 @@ class db_utils():
         self.write_table(file, "answer")
         return
 
+    #Get the top answer that someone has written
+    def get_answers_groupby_class(userID): 
+        query = "SELECT answerText FROM Answers GROUP BY userID HAVING likes > 5;"
+        mycursor.execute(query)
+        select = mycursor.fetchall()
+        return select
+
 
     # close connection
     def destructor(self):

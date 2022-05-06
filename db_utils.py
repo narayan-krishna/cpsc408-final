@@ -179,7 +179,7 @@ class db_utils():
 
     # query to allow users to update an answer
     def update_answer(self, userID,answerID,newAnswerText): 
-        update_query = "UPDATE Answer SET answerText ="+str(newAnswerText)+" WHERE answerID = "+str(answerID)+"AND userID ="+userID+";"
+        update_query = "UPDATE Answer SET answerText = \""+str(newAnswerText)+"\" WHERE answerID = "+str(answerID)+" AND userID = "+userID+";"
         mycursor.execute(update_query)
         mydb.commit()
 

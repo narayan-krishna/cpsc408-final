@@ -219,7 +219,7 @@ class db_utils():
         return
 
     #Get the top answer that someone has written
-    def get_answers_groupby_class(userID): 
+    def get_answers_groupby_class(): 
         query = "SELECT answerText FROM Answers GROUP BY userID HAVING likes > 3;"
         mycursor.execute(query)
         select = mycursor.fetchall()

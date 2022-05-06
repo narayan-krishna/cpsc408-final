@@ -123,7 +123,6 @@ async def get_input(ctx, message, timeout=5):
 
 @bot.command()
 async def AddQuestion(ctx, topic_name="none"):
-    #TODO: figure out how to extract topic
     if topic_name == "none":
         await ctx.send("Command requires topic name --> ex. '!AddQuestion relational algebra'")
     else:

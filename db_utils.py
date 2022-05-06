@@ -1,12 +1,16 @@
 # db_utils.py
+# implements main database utilities with mysql queries
+
 import mysql.connector
 import random
+
 
 mydb = mysql.connector.connect(host="localhost",
 user="root",
 password="P5rv5th2!", # y'all pls don't hack meeeee
 auth_plugin='mysql_native_password',
 database="WizBot")
+
 
 mycursor = mydb.cursor()
 
@@ -64,10 +68,11 @@ class db_utils():
         classID = mycursor.fetchall()
         sql_classMember_insert = '''INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);'''
         vals = (str(classID[0][0]),str(userID))
-        
+
         mycursor.execute(sql_classMember_insert,vals)
         mydb.commit()
         print("Makes it through first execute.")
+
 
     def drop_class(self, userID,class_name):
         #drop class from the class and classMember table
@@ -83,12 +88,19 @@ class db_utils():
         mycursor.execute(sql_delete_class)
         sql_commit = '''COMMIT;'''
         mycursor.execute(sql_commit)
-                            
+
         mydb.commit()
         print("Makes it through first execute.")
 
-    
-            
+
+    # WARNING: DOUBLE CHECK THIS FUNCTION FOR NAMING ISSUES ACROSS DATABASES
+    # this should also take self as a param but throws a warn?
+    def select_class_names():
+        sql_select_classnames = f'SELECT className FROM class;'
+        mycursor.execute(sql_select_classnames)
+        class_names = mycursor.fetchall();
+        return class_names
+
 
     def add_user(self,discord_user_id, user_name): 
         sql_insert = "INSERT INTO User VALUES (%s,%s);"
@@ -138,6 +150,7 @@ class db_utils():
         return returnList
 
 
+    # NOTE: this question should take self as a parameter but seems to work without it
     def get_answer(questionID): 
         #NOTE: can do in one query?
         sql_answerid_select = "SELECT answerID FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
@@ -158,7 +171,7 @@ class db_utils():
         return (answerIDs,answerTexts)
 
     
-    #TODO: implement increment of like count for a specific answer
+    # increments likes of a specific answer when the answer is liked
     def increment_likes(self, answer_id):
         print("MAKES IT TO INCREMENT LIKES.")
         sql_update = "UPDATE Answer SET likes = likes + 1 WHERE answerID ="+str(answer_id)+""
@@ -168,24 +181,33 @@ class db_utils():
         return
 
 
-    #TODO: implement csv file generation
-    def generate_csv(self):
-        sql_get_all = "SELECT * FROM class;"
+    # writes a table to a given a file in a csv format
+    def write_table(self, file, table):
+        sql_get_all = f'SELECT * FROM {table};'
         mycursor.execute(sql_get_all)
-        all_texts = mycursor.fetchall()
-
-        file = open("quizbot_report.csv", "w")
-        for x in all_texts:
-            for y in x:
-                file.write(str(y) + ',')
+        select = mycursor.fetchall()
+        file.write(table + ',\n')
+        for tuples in select:
+            for value in tuples:
+                file.write(str(value) + ',')
             file.write('\n')
-        file.close()
+        file.write('\n')
 
-        print(all_texts)
-   
+
+    # writes all tables to file
+    # PERF: reimplement this with a join??
+    def generate_csv(self):
+        file = open("quizbot_report.csv", "w")
+        self.write_table(file, "user")
+        self.write_table(file, "class")
+        self.write_table(file, "classmember")
+        self.write_table(file, "question")
+        self.write_table(file, "answer")
+        return
+
 
     # close connection
     def destructor(self):
-        # self.db.close()
+        mydb.close()
         return
 

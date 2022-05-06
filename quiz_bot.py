@@ -68,7 +68,7 @@ async def on_ready():
     )
 
 
-#TODO: NEEDS TESTING
+#TODO: this should be done?
 #BUG: Doesn't look at total number of reacts
 # Should use https://stackoverflow.com/questions/64842656/how-can-i-count-the-number-of-reactions-in-discord-js instead
 # track emojis on questions
@@ -82,12 +82,11 @@ async def on_raw_reaction_add(payload):
     if message.author.id == bot.user.id:
         if payload.emoji.name == '👍':
             type, table_id = parse_msg(message.content)
-            print("\n\n\n"+str(type)+"\n\n\n")
+            # print("\n\n\n"+str(type)+"\n\n\n")
             #print("\n\n\n"+str(table_id)+"\n\n\n")
             if table_id == 'A':
-                # do something wtih type, table_id
                 dbu.increment_likes(type)
-                print('A')
+                # print('A')
             msg = "a bot message received a like"
             await channel.send(msg)
 
@@ -145,6 +144,7 @@ async def AddClass(ctx, classToAdd = None, *args):
         err_msg = (f'Usage: !AddClass [classToAdd]')
         await ctx.send(err_msg)
 
+
 @bot.command()
 async def DropClass(ctx, classToDrop = None, *args):
     """Drops User from Class"""
@@ -173,7 +173,7 @@ async def AddQuestion(ctx, class_name= None):
         await ctx.send(f'you said {msg}')
 
 
-#TODO: implement answer question (NEEDS TESTING)
+#TODO: needs further testing
 @bot.command()
 async def AnswerQuestion(ctx, question_id=None):
     """Answer a question given its id"""
@@ -185,7 +185,7 @@ async def AnswerQuestion(ctx, question_id=None):
         dbu.answer_question(ctx.message.author.id,question_id,msg)
 
 
-#TODO: implement get question
+#TODO: needs further testing
 @bot.command()
 async def GetQuestion(ctx):
     """Return a random question from your class"""
@@ -200,7 +200,6 @@ async def GetAnswers(ctx, question_id=None):
     if question_id == None:
         await ctx.send("Command requires a question id --> ex. '!AnswerQuestion 1101'")
     else:
-        # TODO: implement dbutils funciton to to return all answers
         msg = ""
         answerValues = db_utils.get_answer(question_id)
         answerIds = answerValues[0]
@@ -213,19 +212,27 @@ async def GetAnswers(ctx, question_id=None):
         return
 
 
-# #TODO: implement get all classes
+# TODO: needs further testing
 @bot.command()
 async def GetClasses(ctx):
     """Returns a list of all classes"""
-    await ctx.send("[UNIMPLEMENTED]: Returning a list of all classes")
-    # get all classes from dbu.something
+    class_name_tuples = db_utils.select_class_names()
+    msg = ""
+    for tuple in class_name_tuples:
+        msg += tuple[0] + '\n'
+    await ctx.send(msg)
     return
 
 
-#TODO: print this to a file
+# generate a report of all data and send it a csv
+# TODO: needs further testing
 @bot.command()
 async def GetReport(ctx):
+    # NOTE: probably shouldn't include user data within CSV file, maybe only questions and answers
+    """Generate a CSV report containing all information within the database"""
     dbu.generate_csv()
+    file = discord.File("./quizbot_report.csv")
+    await ctx.send(file=file, content="csv report")
     return
 
 

@@ -144,19 +144,6 @@ async def AddClass(ctx, classToAdd = None, *args):
         err_msg = (f'Usage: !AddClass [classToAdd]')
         await ctx.send(err_msg)
 
-# @bot.command()
-# async def UpdateAnswer(ctx, *args):
-#     """Add [classToAdd] to classes in database"""
-#
-#     if len(args) != 2:
-#         err_msg = (f'Command requires two arguments [AnswerID,NewAnswerText]')
-#         await ctx.send(err_msg)
-#         return
-#     else:
-#             if args[0].isnumeric() and args[1].isnumeric() != True:
-#                 dbu.update_answer(ctx.message.author.id,args[0],args[1])
-#                 await ctx.send(err_msg)
-
 
 @bot.command()
 async def DropClass(ctx, classToDrop = None, *args):
@@ -237,6 +224,17 @@ async def UpdateAnswer(ctx, answer_id=None):
     return
 
 
+@bot.command()
+async def GetTopUsersQuestions(ctx):
+    """get the top question written"""
+    user_tuples = dbu.get_answers_groupby_class()
+    msg = ""
+    for tuple in user_tuples:
+        msg += tuple[0] + '\n'
+    await ctx.send(msg)
+    return
+
+
 # TODO: needs further testing
 @bot.command()
 async def GetClasses(ctx):
@@ -247,6 +245,7 @@ async def GetClasses(ctx):
         msg += tuple[0] + '\n'
     await ctx.send(msg)
     return
+
 
 
 # generate a report of all data and send it a csv

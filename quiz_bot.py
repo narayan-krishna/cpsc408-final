@@ -144,23 +144,23 @@ async def AddClass(ctx, classToAdd = None, *args):
         err_msg = (f'Usage: !AddClass [classToAdd]')
         await ctx.send(err_msg)
 
-@bot.command()
-async def UpdateAnswer(ctx, *args):
-    """Add [classToAdd] to classes in database"""
-
-    if len(args) != 2:
-        err_msg = (f'Command requires two arguments [AnswerID,NewAnswerText]')
-        await ctx.send(err_msg)
-        return
-    else:
-            if args[0].isnumeric() and args[1].isnumeric() != True:
-                dbu.update_answer(ctx.message.author.id,args[0],args[1])
-                await ctx.send(err_msg)
+# @bot.command()
+# async def UpdateAnswer(ctx, *args):
+#     """Add [classToAdd] to classes in database"""
+#
+#     if len(args) != 2:
+#         err_msg = (f'Command requires two arguments [AnswerID,NewAnswerText]')
+#         await ctx.send(err_msg)
+#         return
+#     else:
+#             if args[0].isnumeric() and args[1].isnumeric() != True:
+#                 dbu.update_answer(ctx.message.author.id,args[0],args[1])
+#                 await ctx.send(err_msg)
 
 
 @bot.command()
 async def DropClass(ctx, classToDrop = None, *args):
-    """Drops User from Class"""
+    """Drops user from class"""
     if len(args) == 0 and classToDrop != None:
         dbu.drop_class(ctx.message.author.id, classToDrop)
         #err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
@@ -174,7 +174,7 @@ async def DropClass(ctx, classToDrop = None, *args):
 
 @bot.command()
 async def AddQuestion(ctx, class_name= None):
-    """Prompts User to add Question to specific class"""
+    """Prompts user to add question to specific class"""
     #TODO: Should the user be prompted for the class if they don't enter it?
     if class_name == None:
         await ctx.send("Usage: !AddQuestion [className]")
@@ -223,6 +223,18 @@ async def GetAnswers(ctx, question_id=None):
             await ctx.send(msg)
             inc += 1
         return
+
+
+@bot.command()
+async def UpdateAnswer(ctx, answer_id=None):
+    """Update an answer given it's id"""
+    user_id = str(ctx.message.author.id)
+    if answer_id == None:
+        await ctx.send("Command requires a answer id --> ex. '!UpdateAnswer 1101'")
+    else:
+        msg = await get_input(ctx, "What would you like to change the answer to?",30)
+        dbu.update_answer(user_id, answer_id, msg)
+    return
 
 
 # TODO: needs further testing

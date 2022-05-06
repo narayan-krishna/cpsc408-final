@@ -1,0 +1,5 @@
+TODO: rollback transactions 
+TODO: performing an aggregation or groupby clause -- KRISHNA SCOTT MAY 5TH
+TODO: query that contains a subquery
+TODO: two queries that involve joins across three tables
+TODO: database views and indexes

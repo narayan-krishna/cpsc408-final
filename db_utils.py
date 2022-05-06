@@ -161,6 +161,8 @@ class db_utils():
         #NOTE: can do in one query?
         sql_answerid_select = "SELECT answerID FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
         sql_answertext_select = "SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
+
+        #sql_answer_select = "SELECT answerID, (SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC) FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
         #if(sql_injection_check(questionID)): 
         vals = (
             (questionID,)
@@ -171,6 +173,9 @@ class db_utils():
         answerIDs = mycursor.fetchall()
         mycursor.execute(sql_answertext_select,vals)
         answerTexts = mycursor.fetchall()
+
+        #mycursor.execute(sql_answer_select, questionID, questionID) #might need to have question id in vals twice to work properly
+        #answers = mycursor.fetchall()
        
         # TODO: TEST RETURNING TUPLE
 

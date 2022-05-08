@@ -149,11 +149,24 @@ async def AddClass(ctx, classToAdd = None, *args):
 async def DropClass(ctx, classToDrop = None, *args):
     """Drops user from class"""
     if len(args) == 0 and classToDrop != None:
-        dbu.drop_class(ctx.message.author.id, classToDrop)
+        dbu.drop_class(classToDrop)
         #err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
         #await ctx.send(err_msg)
-        msg = (f'Class Dropped.')
-        await ctx.send(msg)
+        
+        input = await get_input(ctx,"Commit or Rollback?",30)
+        if (input == "Commit"): 
+            dbu.commit() 
+            msg = (f'Class Dropped.')
+            await ctx.send(msg)
+        elif (input == "Rollback"): 
+            dbu.rollback()
+            msg = (f'Class Retained.')
+            await ctx.send(msg)
+        else: 
+            err_msg = (f'Input not recognized. Rolling back.')
+            dbu.rollback()
+            await ctx.send(err_msg)
+
     else:
         err_msg = (f'Usage: !DropClass [classToDrop]')
         await ctx.send(err_msg)
@@ -225,16 +238,11 @@ async def UpdateAnswer(ctx, answer_id=None):
 
 
 @bot.command()
-async def GetTopUsersAnswers(ctx):
-    """get the top answer written"""
-    user_tuples = dbu.get_answers_groupby_class()
-    if str(user_tuples) == "[]": 
-        msg = "No answers with 3 or more likes."
-        await ctx.send(msg)
-        return
+async def GetAnswersPerQuestion(ctx):
+    user_tuples = dbu.get_answers_per_question()
     msg = ""
     for tuple in user_tuples:
-        msg += str(tuple[1]) + '\n'
+        msg += str(tuple[0]) + " answers for Question " + str(tuple[1]) + ". \n"
     await ctx.send(msg)
     return
 

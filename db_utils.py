@@ -80,7 +80,7 @@ class db_utils():
         print("Makes it through first execute.")
 
 
-    def drop_class(self, userID,class_name):
+    def drop_class(self, class_name):
         #drop class from the class and classMember table
         sql_select = "SELECT classID FROM Class WHERE className = %s;"
         vals = (str(class_name),)
@@ -92,11 +92,16 @@ class db_utils():
         mycursor.execute(sql_delete_class_member)
         sql_delete_class = '''DELETE FROM Class WHERE className = "%s";''' % class_name
         mycursor.execute(sql_delete_class)
+
+    def commit(self): 
         sql_commit = '''COMMIT;'''
         mycursor.execute(sql_commit)
-
         mydb.commit()
-        print("Makes it through first execute.")
+    
+    def rollback(self): 
+        sql_commit = '''ROLLBACK;'''
+        mycursor.execute(sql_commit)
+        mydb.commit()
 
 
     # WARNING: DOUBLE CHECK THIS FUNCTION FOR NAMING ISSUES ACROSS DATABASES
@@ -224,8 +229,8 @@ class db_utils():
         return
 
     #Get the top answer that someone has written
-    def get_answers_groupby_class(self): 
-        query = "SELECT userID,answerText FROM Answer WHERE likes >= 3 GROUP BY userID,answerText;"
+    def get_answers_per_question(self): 
+        query = "SELECT COUNT(answerID),questionID FROM Answer GROUP BY questionID;"
         mycursor.execute(query)
         select = mycursor.fetchall()
         return select

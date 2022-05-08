@@ -225,12 +225,16 @@ async def UpdateAnswer(ctx, answer_id=None):
 
 
 @bot.command()
-async def GetTopUsersQuestions(ctx):
-    """get the top question written"""
+async def GetTopUsersAnswers(ctx):
+    """get the top answer written"""
     user_tuples = dbu.get_answers_groupby_class()
+    if str(user_tuples) == "[]": 
+        msg = "No answers with 3 or more likes."
+        await ctx.send(msg)
+        return
     msg = ""
     for tuple in user_tuples:
-        msg += tuple[0] + '\n'
+        msg += str(tuple[1]) + '\n'
     await ctx.send(msg)
     return
 

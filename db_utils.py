@@ -179,23 +179,23 @@ class db_utils():
     # NOTE: this question should take self as a parameter but seems to work without it
     def get_answer(questionID): 
         #NOTE: can do in one query?
-        sql_answerid_select = "SELECT answerID FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
-        sql_answertext_select = "SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
+        #sql_answerid_select = "SELECT answerID FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
+        #sql_answertext_select = "SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
 
-        #sql_answer_select = "SELECT answerID, (SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC) FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
+        sql_answer_select = "SELECT answerID, (SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC) FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
         #if(sql_injection_check(questionID)): 
         vals = (
             (questionID,)
         )
         #else: 
         #    return
-        mycursor.execute(sql_answerid_select,vals)
-        answerIDs = mycursor.fetchall()
-        mycursor.execute(sql_answertext_select,vals)
-        answerTexts = mycursor.fetchall()
+        #mycursor.execute(sql_answerid_select,vals)
+        #answerIDs = mycursor.fetchall()
+        #mycursor.execute(sql_answertext_select,vals)
+        #answerTexts = mycursor.fetchall()
 
-        #mycursor.execute(sql_answer_select, questionID, questionID) #might need to have question id in vals twice to work properly
-        #answers = mycursor.fetchall()
+        mycursor.execute(sql_answer_select,vals) 
+        answers = mycursor.fetchall()
        
         # TODO: TEST RETURNING TUPLE
 

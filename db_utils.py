@@ -228,9 +228,24 @@ class db_utils():
         self.write_table(file, "answer")
         return
 
+
     #Get the top answer that someone has written
     def get_answers_per_question(self): 
         query = "SELECT COUNT(answerID),questionID FROM Answer GROUP BY questionID;"
+        mycursor.execute(query)
+        select = mycursor.fetchall()
+        return select
+
+
+    def create_view_attribute(self):
+        query = "CREATE VIEW userID_table AS select userID from user;"
+        mycursor.execute(query)
+        select = mycursor.fetchall()
+        return select
+
+
+    def show_user_ids(self):
+        query = "SELECT * from userID_table;"
         mycursor.execute(query)
         select = mycursor.fetchall()
         return select

@@ -259,7 +259,6 @@ async def GetClasses(ctx):
     return
 
 
-
 # generate a report of all data and send it a csv
 # TODO: needs further testing
 @bot.command()

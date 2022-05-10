@@ -161,6 +161,21 @@ class db_utils():
         return returnList
 
 
+    # WARNING: NEEDS TESTING + DOES THIS WORK WITHOUT CLASSID AS A FOREIGN KEY?
+    def get_question_class(self, classID):
+        if(self.sql_injection_check(classID)): 
+            vals = (
+                (classID,)
+            )
+        else: 
+            return
+        rand_question_select = "SELECT * FROM Question WHERE classID = %s ORDER BY RAND() LIMIT 1;"
+        mycursor.execute(rand_question_select,vals)
+        question = mycursor.fetchall()
+        returnList = [question[0][0],question[0][2]]
+        return returnList
+
+
     # NOTE: this question should take self as a parameter but seems to work without it
     def get_answer(questionID): 
         #NOTE: can do in one query?

@@ -101,7 +101,7 @@ async def WhoAmI(ctx):
 
     await ctx.send(msg)
     # TODO: query print user classes
-    await ctx.send("[UNIMPLEMENTED]: Classes: ")
+    await ctx.send(db_utils.get_classes(ctx.message.author.id))
 
 
 @bot.command()

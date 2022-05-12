@@ -33,7 +33,6 @@ class db_utils():
         # self.cursor = self.db.cursor()
         # print("connection made..")
 
-
     def sql_injection_check(self,string): 
         if (str(string).find("DROP") != -1) or (str(string).find("SELECT") != -1) or (str(string).find("UPDATE") != -1) or (str(string).find("DELETE") != -1) or (str(string).find("INSERT") != -1): 
             print("Sorry, input was suspect and so was dropped for your security.")
@@ -201,6 +200,15 @@ class db_utils():
 
         return (answerIDs,answerTexts)
 
+    def get_classes(userID):
+        sql_select_classnames = "SELECT className FROM class INNER JOIN (SELECT classID FROM (classMember INNER JOIN user ON classmember.userID = user.userID) WHERE classmember.userID = %s) as test ON test.classID = class.classID;" % userID
+        mycursor.execute(sql_select_classnames)
+        class_names = mycursor.fetchall()
+
+        result = "Classes: "
+        for class_name in class_names:
+            result += "\n" + str(class_name[0])
+        return result
 
     # query to allow users to update an answer
     def update_answer(self, userID,answerID,newAnswerText): 
@@ -264,7 +272,6 @@ class db_utils():
         mycursor.execute(query)
         select = mycursor.fetchall()
         return select
-
 
     # close connection
     def destructor(self):

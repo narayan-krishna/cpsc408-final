@@ -58,11 +58,11 @@ class db_utils():
 
     def add_class(self, userID,class_name):
         print("Adding Class!")
-        classID = db_utils.get_class_id(self, class_name)
-        check_if_exists = "SELECT * FROM Class WHERE classID = " + str(classID) + ";"
+        check_if_exists = "SELECT * FROM Class WHERE className = \"" + str(class_name) + "\";"
         mycursor.execute(check_if_exists)
         if (len(mycursor.fetchall()) != 0):
             #Class Exists, so just add user to it
+            classID = db_utils.get_class_id(self, class_name)
             self.add_class_member(classID, userID)
         else:
             #Class Does not Exist

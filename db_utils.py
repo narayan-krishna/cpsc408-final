@@ -184,7 +184,7 @@ class db_utils():
         #sql_answerid_select = "SELECT answerID FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
         #sql_answertext_select = "SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
 
-        sql_answer_select = "SELECT answerID, (SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC) FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
+        sql_answer_select = "SELECT answerID, (SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC) FROM Answer WHERE questionID = %s ORDER BY likes DESC; CREATE INDEX q_index ON Answer(questionID);"
         #if(sql_injection_check(questionID)): 
         vals = (
             (questionID,)

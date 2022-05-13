@@ -42,14 +42,10 @@ class db_utils():
 
 
     def get_class_id(self,class_name): 
-        classID_query = "SELECT classID FROM Class WHERE className = %s;"
-        vals = (
-            (class_name,)
-        )
-        mycursor.execute(classID_query,vals)
-        mydb.commit()
+        classID_query = "SELECT classID FROM Class WHERE className = \"%s\";" % class_name
+        mycursor.execute(classID_query)
         classID = mycursor.fetchall()
-        return classID
+        return classID[0][0]
 
 
     def add_class_member(self,classID,userID):
@@ -61,23 +57,30 @@ class db_utils():
 
 
     def add_class(self, userID,class_name):
-        #insert the class into the class table
-        sql_insert = "INSERT INTO Class(className) VALUES (%s);"
-        vals = ( 
-            (class_name,)
-        )
-        mycursor.execute(sql_insert,vals)
-        mydb.commit()
-        sql_select =  "SELECT @id:=MAX(classID) FROM Class;"
-        mycursor.execute(sql_select)
-        classID = mycursor.fetchall()
-        sql_classMember_insert = '''INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);'''
-        vals = (str(classID[0][0]),str(userID))
+        print("Adding Class!")
+        classID = db_utils.get_class_id(self, class_name)
+        check_if_exists = "SELECT * FROM Class WHERE classID = " + str(classID) + ";"
+        mycursor.execute(check_if_exists)
+        if (len(mycursor.fetchall()) != 0):
+            #Class Exists, so just add user to it
+            self.add_class_member(classID, userID)
+        else:
+            #Class Does not Exist
+            #insert the class into the class table
+            sql_insert = "INSERT INTO Class(className) VALUES (%s);"
+            vals = ( 
+                (class_name,)
+            )
+            mycursor.execute(sql_insert,vals)
+            mydb.commit()
+            sql_select =  "SELECT @id:=MAX(classID) FROM Class;"
+            mycursor.execute(sql_select)
+            classID = mycursor.fetchall()
+            sql_classMember_insert = '''INSERT INTO ClassMember (classID,userID) VALUES (%s,%s);'''
+            vals = (str(classID[0][0]),str(userID))
 
-        mycursor.execute(sql_classMember_insert,vals)
-        mydb.commit()
-        print("Makes it through first execute.")
-
+            mycursor.execute(sql_classMember_insert,vals)
+            mydb.commit()
 
     def drop_class(self, class_name):
         #drop class from the class and classMember table

@@ -133,8 +133,7 @@ async def RemoveClass(ctx, classToRemove = None):
 
 @bot.command()
 async def AddClass(ctx, classToAdd = None, *args):
-    """Add [classToAdd] to classes in database"""
-
+    """Add yourself to [classToAdd], and add [classToAdd] to classes in database if not already present"""
     if len(args) == 0 and classToAdd != None:
         dbu.add_class(ctx.message.author.id, classToAdd)
         #err_msg = (f'Command requires class name with list of topics, i.e. !AddClassTopic cpsc231 java oo polymorphism')
@@ -143,7 +142,6 @@ async def AddClass(ctx, classToAdd = None, *args):
     else:
         err_msg = (f'Usage: !AddClass [classToAdd]')
         await ctx.send(err_msg)
-
 
 @bot.command()
 async def DropClass(ctx, classToDrop = None, *args):

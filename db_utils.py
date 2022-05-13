@@ -213,6 +213,25 @@ class db_utils():
             result += "\n" + str(class_name[0])
         return result
 
+    def get_global_leaderboard():
+        leaderboard_query = "SELECT user.userName, SUM(likes) FROM answer INNER JOIN question ON answer.questionID = question.questionID INNER JOIN user on question.userID = user.userID GROUP BY answer.userID;"
+        mycursor.execute(leaderboard_query)
+        names = mycursor.fetchall()
+        final = "GLOBAL Leaderboard:\n"
+        for tuple in names:
+            final += str(tuple[0]) + ": " + str(tuple[1]) + "\n"
+        return final
+
+    def get_leaderboard(class_name):
+        leaderboard_query = "SELECT user.userName, SUM(likes) FROM answer INNER JOIN question ON answer.questionID = question.questionID INNER JOIN user on question.userID = user.userID WHERE classID = %s GROUP BY answer.userID;" % db_utils.get_class_id(None, class_name)
+        mycursor.execute(leaderboard_query)
+        names = mycursor.fetchall()
+        final = "Leaderboard for %s:\n" % class_name
+        for tuple in names:
+            final += str(tuple[0]) + ": " + str(tuple[1]) + "\n"
+        if(len(names) == 0):
+            final += "No likes :(\n"
+        return final
     # query to allow users to update an answer
     def update_answer(self, userID,answerID,newAnswerText): 
         update_query = "UPDATE Answer SET answerText = \""+str(newAnswerText)+"\" WHERE answerID = "+str(answerID)+" AND userID = "+userID+";"
@@ -280,4 +299,3 @@ class db_utils():
     def destructor(self):
         mydb.close()
         return
-

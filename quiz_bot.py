@@ -103,6 +103,14 @@ async def WhoAmI(ctx):
     # TODO: query print user classes
     await ctx.send(db_utils.get_classes(ctx.message.author.id))
 
+@bot.command()
+async def Leaderboard(ctx, class_name = None):
+    if(class_name == None):
+        #No class entered; get global leaderboard
+        await ctx.send(db_utils.get_global_leaderboard())
+    else:
+        #Class entered; get leaderboard specific to that class
+        await ctx.send(db_utils.get_leaderboard(class_name))
 
 @bot.command()
 #TODO: Should this be on Login instead of when the user types it?

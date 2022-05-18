@@ -179,29 +179,29 @@ class db_utils():
 
 
     # NOTE: this question should take self as a parameter but seems to work without it
-    def get_answer(self,questionID): 
+    def get_answer(questionID): 
         #NOTE: can do in one query?
-        #sql_answerid_select = "SELECT answerID FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
-        #sql_answertext_select = "SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
+        sql_answerid_select = "SELECT answerID FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
+        sql_answertext_select = "SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC;"
 
-        sql_answer_select = "SELECT answerID, (SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC) FROM Answer WHERE questionID = %s ORDER BY likes DESC; CREATE INDEX q_index ON Answer(questionID);"
-        if(self.sql_injection_check(questionID)): 
-            vals = (
-                (questionID,)
-        )
-        else: 
-            return
-        #mycursor.execute(sql_answerid_select,vals)
-        #answerIDs = mycursor.fetchall()
-        #mycursor.execute(sql_answertext_select,vals)
-        #answerTexts = mycursor.fetchall()
+        #sql_answer_select = "SELECT answerID, (SELECT answerText FROM Answer WHERE questionID = %s ORDER BY likes DESC) FROM Answer WHERE questionID = %s ORDER BY likes DESC; CREATE INDEX q_index ON Answer(questionID);"
+        #if(sql_injection_check(questionID)): 
+        vals = (
+                questionID,
+            )
+        #else: 
+        #    return
+        mycursor.execute(sql_answerid_select,vals)
+        answerIDs = mycursor.fetchall()
+        mycursor.execute(sql_answertext_select,vals)
+        answerTexts = mycursor.fetchall()
 
-        mycursor.execute(sql_answer_select,vals) 
-        answers = mycursor.fetchall()
+        #mycursor.execute(sql_answer_select,vals) 
+        #answers = mycursor.fetchall()
        
         # TODO: TEST RETURNING TUPLE
 
-        return answers
+        return (answerIDs,answerTexts)
 
     def get_classes(userID):
         sql_select_classnames = "SELECT className FROM class INNER JOIN (SELECT classID FROM (classMember INNER JOIN user ON classmember.userID = user.userID) WHERE classmember.userID = %s) as test ON test.classID = class.classID;" % userID

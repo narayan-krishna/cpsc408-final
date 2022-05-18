@@ -276,5 +276,11 @@ async def GetReport(ctx):
     await ctx.send(file=file, content="csv report")
     return
 
+@bot.command()
+async def GetUsers(ctx): 
+    msg = dbu.create_view_attribute()
+    await ctx.send(msg)
+    return
+
 
 bot.run(TOKEN)

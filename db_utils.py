@@ -109,7 +109,7 @@ class db_utils():
     # WARNING: DOUBLE CHECK THIS FUNCTION FOR NAMING ISSUES ACROSS DATABASES
     # this should also take self as a param but throws a warn?
     def select_class_names():
-        sql_select_classnames = f'SELECT className FROM class;'
+        sql_select_classnames = f'SELECT className FROM class; CREATE INDEX cName_index ON class(classname);'
         mycursor.execute(sql_select_classnames)
         class_names = mycursor.fetchall();
         return class_names
